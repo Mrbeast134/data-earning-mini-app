@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataEarn</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101510;color:white;font-family:Arial,sans-serif;padding:20px}
+header{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:22px;font-weight:bold;color:#a9e88c}
+.card{background:#1b261d;padding:22px;border-radius:18px;margin-top:22px}
+.balance{font-size:36px;font-weight:bold;margin:12px 0}
+small{color:#aab6aa}
+nav{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+button{background:#a9e88c;color:#102010;border:0;padding:13px;border-radius:12px;font-weight:bold;cursor:pointer}
+section{margin-top:25px}
+.item{background:#1b261d;padding:16px;border-radius:14px;margin-top:12px}
+footer{margin-top:30px;color:#899589;text-align:center;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">DATAEARN</div>
+<div id="username">Welcome!</div>
+</header>
 
+<div class="card">
+<small>YOUR DATA BALANCE</small>
+<div class="balance"><span id="balance">0</span> MB</div>
+<small>Complete tasks and invite friends to earn data.</small>
+</div>
+
+<nav>
+<button onclick="show('tasks')">Tasks</button>
+<button onclick="show('referrals')">Referrals</button>
+<button onclick="show('profile')">Profile</button>
+</nav>
+
+<section id="tasks">
+<h3>Earn Free Data</h3>
+<div class="item">
+<b>Complete tasks</b>
+<p><small>Complete available tasks to earn MB.</small></p>
+<button onclick="alert('Tasks coming soon!')">View Tasks</button>
+</div>
+</section>
+
+<section id="referrals" style="display:none">
+<h3>Invite Friends</h3>
+<div class="item">
+<p>Invite friends and earn MB rewards.</p>
+<button onclick="share()">Invite Friends</button>
+</div>
+</section>
+
+<section id="profile" style="display:none">
+<h3>Your Profile</h3>
+<div class="item" id="profileInfo">Loading profile...</div>
+</section>
+
+<footer>DATAEARN • Powered by Telegram</footer>
+
+<script>
+const tg=window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+
+const user=tg.initDataUnsafe?.user;
+
+if(user){
+document.getElementById('username').textContent=
+'Hello, '+(user.first_name||'User');
+document.getElementById('profileInfo').textContent=
+user.first_name+' | ID: '+user.id;
+}
+
+function show(page){
+['tasks','referrals','profile'].forEach(id=>{
+document.getElementById(id).style.display=
+id===page?'block':'none';
+});
+}
+
+function share(){
+const bot='DataFluxnBot';
+const link='https://t.me/'+bot+'?start='+user?.id;
+tg.openTelegramLink(
+'https://t.me/share/url?url='+encodeURIComponent(link)
+);
+}
+</script>
+</body>
+</html>
